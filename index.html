@@ -6,171 +6,400 @@
 <title>Julia et les animaux perdus</title>
 
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
-    body {
-        overflow: hidden;
-        background: #87ceeb;
-        font-family: Arial, sans-serif;
-    }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    #viewport {
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-        position: relative;
-    }
+body{
+    overflow:hidden;
+    font-family:Arial, sans-serif;
+    background:#87ceeb;
+}
 
-    #world {
-        width: 2200px;
-        height: 1400px;
-        position: absolute;
-        background:
-        linear-gradient(#87CEEB 0%, #bdefff 35%, #63bf65 35%, #4b944c 100%);
-    }
+/* MENU */
 
-    #player {
-        position: absolute;
-        width: 64px;
-        height: 64px;
-        font-size: 52px;
-        z-index: 10;
-        transition: transform 0.08s;
-    }
+#menu{
+    position:fixed;
+    inset:0;
+    background:
+    linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.55)),
+    linear-gradient(#87CEEB 0%, #b8f0ff 45%, #58af58 45%, #418341 100%);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:5000;
+    color:white;
+    text-align:center;
+}
 
-    .animal {
-        position: absolute;
-        font-size: 48px;
-        z-index: 5;
-    }
+#menu h1{
+    font-size:70px;
+    margin-bottom:20px;
+    text-shadow:3px 3px 10px black;
+}
 
-    .obstacle {
-        position: absolute;
-    }
+#menu p{
+    font-size:22px;
+    margin-bottom:35px;
+    text-shadow:2px 2px 5px black;
+}
 
-    .rock {
-        background: #777;
-        border-radius: 20px;
-    }
+#startBtn{
+    padding:18px 45px;
+    font-size:24px;
+    border:none;
+    border-radius:20px;
+    cursor:pointer;
+    background:#ff7ac3;
+    color:white;
+    transition:0.2s;
+}
 
-    .log {
-        background: #6d3d14;
-        border-radius: 10px;
-    }
+#startBtn:hover{
+    transform:scale(1.08);
+}
 
-    .river {
-        background: #2f8fff;
-    }
+/* MONDE */
 
-    .tree {
-        position: absolute;
-        width: 90px;
-        height: 120px;
-    }
+#viewport{
+    width:100vw;
+    height:100vh;
+    overflow:hidden;
+    position:relative;
+}
 
-    .treeTop {
-        width: 90px;
-        height: 90px;
-        border-radius: 50%;
-        background: #228b22;
-    }
+#world{
+    width:2600px;
+    height:1800px;
+    position:absolute;
+    background:
+    linear-gradient(#87CEEB 0%, #bdefff 35%, #63bf65 35%, #4b944c 100%);
+}
 
-    .treeTrunk {
-        width: 20px;
-        height: 40px;
-        background: #6d3d14;
-        margin: auto;
-    }
+/* JOUEUR */
 
-    #ui {
-        position: fixed;
-        top: 15px;
-        left: 15px;
-        color: white;
-        z-index: 999;
-        text-shadow: 2px 2px 5px black;
-    }
+#player{
+    position:absolute;
+    width:64px;
+    height:64px;
+    font-size:52px;
+    z-index:50;
+    transition:transform 0.08s;
+}
 
-    #messageBox {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: white;
-        width: 500px;
-        max-width: 90%;
-        padding: 25px;
-        border-radius: 20px;
-        display: none;
-        z-index: 1000;
-        box-shadow: 0 0 30px rgba(0,0,0,0.4);
-    }
+/* UI */
 
-    #messageBox h2 {
-        margin-bottom: 15px;
-        color: #ff5ca8;
-    }
+#ui{
+    position:fixed;
+    top:15px;
+    left:15px;
+    color:white;
+    z-index:999;
+    text-shadow:2px 2px 5px black;
+}
 
-    #messageBox p {
-        line-height: 1.5;
-        font-size: 18px;
-    }
+#ui h1{
+    margin-bottom:5px;
+}
 
-    button {
-        margin-top: 20px;
-        padding: 10px 18px;
-        border: none;
-        border-radius: 10px;
-        background: #4caf50;
-        color: white;
-        cursor: pointer;
-    }
+.questBox{
+    position:fixed;
+    top:15px;
+    right:15px;
+    background:rgba(255,255,255,0.93);
+    padding:15px;
+    border-radius:15px;
+    width:270px;
+    z-index:999;
+    box-shadow:0 0 20px rgba(0,0,0,0.25);
+}
 
-    #winScreen {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.8);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        color: white;
-        z-index: 2000;
-    }
+.questDone{
+    text-decoration:line-through;
+    color:green;
+}
 
-    #winScreen h1 {
-        font-size: 60px;
-        margin-bottom: 20px;
-    }
+/* ANIMAUX */
+
+.animal{
+    position:absolute;
+    font-size:50px;
+    z-index:40;
+}
+
+/* MESSAGE */
+
+#messageBox{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
+    width:520px;
+    max-width:90%;
+    background:white;
+    padding:30px;
+    border-radius:25px;
+    display:none;
+    z-index:4000;
+    box-shadow:0 0 30px rgba(0,0,0,0.35);
+}
+
+#messageBox h2{
+    color:#ff5ca8;
+    margin-bottom:15px;
+}
+
+#messageBox p{
+    line-height:1.6;
+    font-size:19px;
+}
+
+#continueBtn{
+    margin-top:20px;
+    padding:12px 20px;
+    border:none;
+    border-radius:12px;
+    background:#4caf50;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+/* FIN */
+
+#winScreen{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.82);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    color:white;
+    z-index:6000;
+    text-align:center;
+}
+
+#winScreen h1{
+    font-size:70px;
+    margin-bottom:20px;
+}
+
+/* DÉCOR */
+
+.tree{
+    position:absolute;
+    width:90px;
+    height:120px;
+}
+
+.treeTop{
+    width:90px;
+    height:90px;
+    background:#228b22;
+    border-radius:50%;
+}
+
+.treeTrunk{
+    width:20px;
+    height:40px;
+    background:#6d3d14;
+    margin:auto;
+}
+
+.flower{
+    position:absolute;
+    font-size:28px;
+}
+
+.path{
+    position:absolute;
+    background:#c8a57a;
+    border-radius:50px;
+}
+
+.lake{
+    position:absolute;
+    background:#42a5ff;
+    border-radius:50%;
+}
+
+.bush{
+    position:absolute;
+    width:70px;
+    height:70px;
+    background:#2d9b2f;
+    border-radius:50%;
+}
+
+.house{
+    position:absolute;
+    width:180px;
+    height:180px;
+}
+
+.houseRoof{
+    width:0;
+    height:0;
+    border-left:90px solid transparent;
+    border-right:90px solid transparent;
+    border-bottom:70px solid #9c2f2f;
+}
+
+.houseBody{
+    width:180px;
+    height:110px;
+    background:#f2d6a2;
+    border:4px solid #8b5a2b;
+    position:relative;
+}
+
+.door{
+    width:40px;
+    height:65px;
+    background:#6d3d14;
+    position:absolute;
+    bottom:0;
+    left:70px;
+}
+
+.window{
+    width:30px;
+    height:30px;
+    background:#9fe8ff;
+    position:absolute;
+    top:20px;
+}
+
+.window.left{
+    left:25px;
+}
+
+.window.right{
+    right:25px;
+}
+
+.rock{
+    position:absolute;
+    background:#757575;
+    border-radius:20px;
+}
+
+.log{
+    position:absolute;
+    background:#6d3d14;
+    border-radius:10px;
+}
+
+.river{
+    position:absolute;
+    background:#3390ff;
+}
+
+.obstacle{
+    position:absolute;
+}
+
 </style>
 </head>
 
 <body>
 
+<!-- MENU -->
+
+<div id="menu">
+
+    <h1>🦦 Julia</h1>
+
+    <p>
+        Retrouve Minette, Tchoupi et Tiplouf
+        dans le grand monde magique.
+    </p>
+
+    <button id="startBtn">
+        Lancer l'aventure
+    </button>
+
+</div>
+
+<!-- JEU -->
+
 <div id="viewport">
 
     <div id="world">
 
-        <!-- Joueur -->
+        <!-- Julia -->
         <div id="player">🦦</div>
 
         <!-- Animaux -->
-        <div class="animal" id="minette" style="left:1800px;top:350px;">🐱</div>
-        <div class="animal" id="tchoupi" style="left:400px;top:1100px;">🐰</div>
-        <div class="animal" id="tiplouf" style="left:1950px;top:1200px;">🐇</div>
+        <div class="animal" id="minette"
+        style="left:2150px;top:350px;">🐱</div>
 
-        <!-- Obstacles -->
-        <div class="obstacle rock" style="left:500px;top:300px;width:160px;height:120px;"></div>
-        <div class="obstacle rock" style="left:1300px;top:850px;width:200px;height:140px;"></div>
+        <div class="animal" id="tchoupi"
+        style="left:420px;top:1450px;">🐰</div>
 
-        <div class="obstacle log" style="left:900px;top:400px;width:300px;height:50px;"></div>
-        <div class="obstacle log" style="left:1400px;top:200px;width:250px;height:50px;"></div>
+        <div class="animal" id="tiplouf"
+        style="left:2300px;top:1450px;">🐇</div>
 
-        <div class="obstacle river" style="left:700px;top:0;width:180px;height:700px;"></div>
+        <!-- Chemins -->
+        <div class="path"
+        style="left:100px;top:500px;width:1600px;height:90px;"></div>
+
+        <div class="path"
+        style="left:1500px;top:500px;width:90px;height:900px;"></div>
+
+        <!-- Lac -->
+        <div class="lake obstacle"
+        style="left:1650px;top:150px;width:350px;height:250px;"></div>
+
+        <!-- Rivière -->
+        <div class="river obstacle"
+        style="left:950px;top:0;width:180px;height:900px;"></div>
+
+        <!-- Rochers -->
+        <div class="rock obstacle"
+        style="left:550px;top:350px;width:180px;height:130px;"></div>
+
+        <div class="rock obstacle"
+        style="left:1800px;top:1050px;width:220px;height:150px;"></div>
+
+        <!-- Troncs -->
+        <div class="log obstacle"
+        style="left:1300px;top:300px;width:300px;height:60px;"></div>
+
+        <div class="log obstacle"
+        style="left:900px;top:1200px;width:400px;height:50px;"></div>
+
+        <!-- Maisons -->
+        <div class="house obstacle"
+        style="left:320px;top:820px;">
+
+            <div class="houseRoof"></div>
+
+            <div class="houseBody">
+                <div class="door"></div>
+                <div class="window left"></div>
+                <div class="window right"></div>
+            </div>
+
+        </div>
+
+        <div class="house obstacle"
+        style="left:1900px;top:900px;">
+
+            <div class="houseRoof"></div>
+
+            <div class="houseBody">
+                <div class="door"></div>
+                <div class="window left"></div>
+                <div class="window right"></div>
+            </div>
+
+        </div>
 
         <!-- Arbres -->
         <div class="tree" style="left:250px;top:250px;">
@@ -178,164 +407,391 @@
             <div class="treeTrunk"></div>
         </div>
 
-        <div class="tree" style="left:1600px;top:900px;">
+        <div class="tree" style="left:700px;top:900px;">
             <div class="treeTop"></div>
             <div class="treeTrunk"></div>
         </div>
 
+        <div class="tree" style="left:2100px;top:700px;">
+            <div class="treeTop"></div>
+            <div class="treeTrunk"></div>
+        </div>
+
+        <!-- Buissons -->
+        <div class="bush obstacle"
+        style="left:850px;top:980px;"></div>
+
+        <div class="bush obstacle"
+        style="left:930px;top:1060px;"></div>
+
+        <div class="bush obstacle"
+        style="left:2000px;top:620px;"></div>
+
+        <!-- Fleurs -->
+        <div class="flower"
+        style="left:530px;top:700px;">🌸</div>
+
+        <div class="flower"
+        style="left:580px;top:730px;">🌼</div>
+
+        <div class="flower"
+        style="left:630px;top:710px;">🌺</div>
+
+        <div class="flower"
+        style="left:1450px;top:820px;">🌷</div>
+
+        <div class="flower"
+        style="left:1520px;top:860px;">🌻</div>
+
     </div>
 </div>
 
+<!-- UI -->
+
 <div id="ui">
+
     <h1>🦦 Julia</h1>
-    <p>Animaux retrouvés : <span id="score">0</span>/3</p>
-    <p>ZQSD ou flèches directionnelles</p>
+
+    <p>
+        Animaux retrouvés :
+        <span id="score">0</span>/3
+    </p>
+
+    <p>Déplacements : ZQSD / WASD / Flèches</p>
+
 </div>
+
+<!-- QUÊTES -->
+
+<div class="questBox">
+
+    <h3>📜 Quêtes</h3>
+
+    <p id="q1">⬜ Retrouver Minette</p>
+    <p id="q2">⬜ Retrouver Tchoupi</p>
+    <p id="q3">⬜ Retrouver Tiplouf</p>
+
+</div>
+
+<!-- LETTRE -->
 
 <div id="messageBox">
-    <h2>📩 Lettre trouvée</h2>
+
+    <h2 id="messageTitle"></h2>
+
     <p id="messageText"></p>
-    <button onclick="closeMessage()">Continuer</button>
+
+    <button id="continueBtn">
+        Continuer
+    </button>
+
 </div>
 
+<!-- FIN -->
+
 <div id="winScreen">
+
     <h1>🎉 Bravo !</h1>
-    <p>Julia a retrouvé tous ses amis.</p>
+
+    <p>
+        Julia a retrouvé Minette,
+        Tchoupi et Tiplouf ❤️
+    </p>
+
 </div>
 
 <script>
+
 const player = document.getElementById("player");
 const world = document.getElementById("world");
 
+const startBtn = document.getElementById("startBtn");
+const menu = document.getElementById("menu");
+
+const continueBtn = document.getElementById("continueBtn");
+
 let x = 120;
 let y = 120;
+
 const speed = 5;
 
 let found = 0;
 
+let gameStarted = false;
+let gamePaused = false;
+
 const keys = {};
 
+const foundSound =
+new Audio("https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3");
+
+const winSound =
+new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3");
+
 const messages = {
-    minette: "Même dans les moments compliqués, tu avances toujours 🐱",
-    tchoupi: "Les petites victoires comptent énormément 🐰",
-    tiplouf: "Continue d’avancer, tu peux être fier de toi 🐇"
+
+    minette: {
+        title: "🐱 Minette retrouvée !",
+        text:
+        "Minette était cachée près du lac.\n\nMême quand tu traverses des moments compliqués, tu avances toujours."
+    },
+
+    tchoupi: {
+        title: "🐰 Tchoupi retrouvé !",
+        text:
+        "Tchoupi sort du jardin fleuri.\n\nLes petites victoires sont importantes. Continue d’avancer."
+    },
+
+    tiplouf: {
+        title: "🐇 Tiplouf retrouvé !",
+        text:
+        "Tiplouf était caché près de la maison.\n\nTu peux être fier de ton chemin et de tous tes efforts."
+    }
+
 };
 
-const obstacles = [...document.querySelectorAll(".obstacle")];
+const obstacles =
+[...document.querySelectorAll(".obstacle")];
 
-function rectsCollide(r1, r2) {
-    return (
+/* MENU */
+
+startBtn.addEventListener("click", () => {
+
+    menu.style.display = "none";
+
+    gameStarted = true;
+
+});
+
+/* COLLISIONS */
+
+function rectsCollide(r1, r2){
+
+    return(
+
         r1.x < r2.x + r2.width &&
         r1.x + r1.width > r2.x &&
         r1.y < r2.y + r2.height &&
         r1.y + r1.height > r2.y
+
     );
+
 }
 
-function movePlayer() {
+/* MOUVEMENT */
 
-    let nextX = x;
-    let nextY = y;
+function movePlayer(){
 
-    if(keys["w"] || keys["arrowup"]) nextY -= speed;
-    if(keys["s"] || keys["arrowdown"]) nextY += speed;
-    if(keys["a"] || keys["arrowleft"]) nextX -= speed;
-    if(keys["d"] || keys["arrowright"]) nextX += speed;
+    if(gameStarted && !gamePaused){
 
-    const futureRect = {
-        x: nextX,
-        y: nextY,
-        width: 50,
-        height: 50
-    };
+        let nextX = x;
+        let nextY = y;
 
-    let blocked = false;
+        if(keys["z"] || keys["w"] || keys["arrowup"])
+            nextY -= speed;
 
-    obstacles.forEach(obs => {
-        const rect = {
-            x: obs.offsetLeft,
-            y: obs.offsetTop,
-            width: obs.offsetWidth,
-            height: obs.offsetHeight
+        if(keys["s"] || keys["arrowdown"])
+            nextY += speed;
+
+        if(keys["q"] || keys["a"] || keys["arrowleft"])
+            nextX -= speed;
+
+        if(keys["d"] || keys["arrowright"])
+            nextX += speed;
+
+        const futureRect = {
+
+            x: nextX,
+            y: nextY,
+            width: 50,
+            height: 50
+
         };
 
-        if(rectsCollide(futureRect, rect)) {
-            blocked = true;
-        }
-    });
+        let blocked = false;
 
-    if(!blocked) {
-        x = nextX;
-        y = nextY;
+        obstacles.forEach(obs => {
+
+            const rect = {
+
+                x: obs.offsetLeft,
+                y: obs.offsetTop,
+                width: obs.offsetWidth,
+                height: obs.offsetHeight
+
+            };
+
+            if(rectsCollide(futureRect, rect)){
+
+                blocked = true;
+
+            }
+
+        });
+
+        if(!blocked){
+
+            x = nextX;
+            y = nextY;
+
+        }
+
+        x = Math.max(0, Math.min(2540, x));
+        y = Math.max(0, Math.min(1740, y));
+
+        player.style.left = x + "px";
+        player.style.top = y + "px";
+
+        cameraFollow();
+
+        checkAnimals();
     }
 
-    x = Math.max(0, Math.min(2140, x));
-    y = Math.max(0, Math.min(1340, y));
-
-    player.style.left = x + "px";
-    player.style.top = y + "px";
-
-    cameraFollow();
-    checkAnimals();
-
     requestAnimationFrame(movePlayer);
+
 }
 
-function cameraFollow() {
-    const camX = x - window.innerWidth / 2;
-    const camY = y - window.innerHeight / 2;
+/* CAMÉRA */
+
+function cameraFollow(){
+
+    const camX =
+    x - window.innerWidth / 2;
+
+    const camY =
+    y - window.innerHeight / 2;
 
     world.style.transform =
-        `translate(${-camX}px, ${-camY}px)`;
+    `translate(${-camX}px, ${-camY}px)`;
+
 }
 
-function checkAnimals() {
+/* ANIMAUX */
 
-    document.querySelectorAll(".animal").forEach(animal => {
+function checkAnimals(){
+
+    document.querySelectorAll(".animal")
+    .forEach(animal => {
 
         if(animal.dataset.done) return;
 
         const ax = animal.offsetLeft;
         const ay = animal.offsetTop;
 
-        const dist = Math.hypot(ax - x, ay - y);
+        const dist =
+        Math.hypot(ax - x, ay - y);
 
-        if(dist < 70) {
+        if(dist < 70){
+
+            foundSound.play();
 
             animal.dataset.done = true;
             animal.style.display = "none";
 
             found++;
 
-            document.getElementById("score").textContent = found;
+            document.getElementById("score")
+            .textContent = found;
 
-            document.getElementById("messageText").innerText =
-                messages[animal.id];
+            const data =
+            messages[animal.id];
 
-            document.getElementById("messageBox").style.display = "block";
+            document.getElementById("messageTitle")
+            .innerText = data.title;
 
-            if(found === 3) {
-                setTimeout(() => {
-                    document.getElementById("winScreen").style.display = "flex";
-                }, 800);
+            document.getElementById("messageText")
+            .innerText = data.text;
+
+            document.getElementById("messageBox")
+            .style.display = "block";
+
+            gamePaused = true;
+
+            /* QUÊTES */
+
+            if(animal.id === "minette"){
+
+                document.getElementById("q1")
+                .classList.add("questDone");
+
+                document.getElementById("q1")
+                .innerHTML =
+                "✅ Retrouver Minette";
+
             }
+
+            if(animal.id === "tchoupi"){
+
+                document.getElementById("q2")
+                .classList.add("questDone");
+
+                document.getElementById("q2")
+                .innerHTML =
+                "✅ Retrouver Tchoupi";
+
+            }
+
+            if(animal.id === "tiplouf"){
+
+                document.getElementById("q3")
+                .classList.add("questDone");
+
+                document.getElementById("q3")
+                .innerHTML =
+                "✅ Retrouver Tiplouf";
+
+            }
+
+            /* FIN */
+
+            if(found === 3){
+
+                setTimeout(() => {
+
+                    winSound.play();
+
+                    document.getElementById("winScreen")
+                    .style.display = "flex";
+
+                }, 1200);
+
+            }
+
         }
+
     });
+
 }
 
-function closeMessage() {
-    document.getElementById("messageBox").style.display = "none";
-}
+/* CONTINUER */
+
+continueBtn.addEventListener("click", () => {
+
+    document.getElementById("messageBox")
+    .style.display = "none";
+
+    gamePaused = false;
+
+});
+
+/* CLAVIER */
 
 window.addEventListener("keydown", e => {
+
     keys[e.key.toLowerCase()] = true;
+
 });
 
 window.addEventListener("keyup", e => {
+
     keys[e.key.toLowerCase()] = false;
+
 });
 
+/* START */
+
 movePlayer();
+
 </script>
 
 </body>
