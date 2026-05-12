@@ -1428,5 +1428,247 @@ window.addEventListener("keyup",e=>{
 /* ===== START ===== */
 movePlayer();
 </script>
+<!-- ===== CONTRÔLES MOBILE ===== -->
+<div id="mobileControls">
+  <div id="joystickBase">
+    <div id="joystickStick"></div>
+  </div>
+
+  <button id="sprintBtn">⚡</button>
+</div>
+
+<style>
+/* ===== MOBILE ===== */
+#mobileControls{
+  display:none;
+}
+
+@media (max-width: 900px){
+
+  body{
+    touch-action:none;
+    overscroll-behavior:none;
+  }
+
+  #mobileControls{
+    display:block;
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+  }
+
+  #joystickBase{
+    position:absolute;
+    left:25px;
+    bottom:25px;
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.18);
+    backdrop-filter:blur(10px);
+    border:2px solid rgba(255,255,255,0.35);
+    pointer-events:auto;
+    touch-action:none;
+  }
+
+  #joystickStick{
+    position:absolute;
+    left:35px;
+    top:35px;
+    width:70px;
+    height:70px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.55);
+    border:2px solid rgba(255,255,255,0.6);
+    box-shadow:0 4px 15px rgba(0,0,0,0.2);
+    transition:left 0.03s, top 0.03s;
+  }
+
+  #sprintBtn{
+    position:absolute;
+    right:30px;
+    bottom:40px;
+    width:95px;
+    height:95px;
+    border:none;
+    border-radius:50%;
+    font-size:34px;
+    background:linear-gradient(135deg,#ff6eb5,#b47bff);
+    color:white;
+    box-shadow:0 6px 25px rgba(0,0,0,0.3);
+    pointer-events:auto;
+  }
+
+  .questBox{
+    width:180px;
+    font-size:12px;
+  }
+
+  #minimap{
+    width:120px;
+    height:85px;
+  }
+
+  .ui-card{
+    padding:10px 14px;
+  }
+
+  .menu-title{
+    font-size:48px;
+  }
+
+  .menu-card{
+    padding:35px 25px;
+  }
+
+  #messageBox{
+    width:92%;
+    padding:24px;
+  }
+
+}
+</style>
+
+<script>
+/* ===== JOYSTICK MOBILE ===== */
+
+const joystickBase = document.getElementById("joystickBase");
+const joystickStick = document.getElementById("joystickStick");
+const sprintBtn = document.getElementById("sprintBtn");
+
+let touchMove = {
+  x:0,
+  y:0
+};
+
+function resetJoystick(){
+
+  joystickStick.style.left = "35px";
+  joystickStick.style.top = "35px";
+
+  touchMove.x = 0;
+  touchMove.y = 0;
+}
+
+if(joystickBase){
+
+  joystickBase.addEventListener("touchstart", e=>{
+    e.preventDefault();
+  }, { passive:false });
+
+  joystickBase.addEventListener("touchmove", e=>{
+
+    e.preventDefault();
+
+    const rect = joystickBase.getBoundingClientRect();
+    const touch = e.touches[0];
+
+    const centerX = rect.left + rect.width/2;
+    const centerY = rect.top + rect.height/2;
+
+    let dx = touch.clientX - centerX;
+    let dy = touch.clientY - centerY;
+
+    const dist = Math.hypot(dx, dy);
+    const maxDist = 42;
+
+    if(dist > maxDist){
+      dx = (dx / dist) * maxDist;
+      dy = (dy / dist) * maxDist;
+    }
+
+    joystickStick.style.left = (35 + dx) + "px";
+    joystickStick.style.top = (35 + dy) + "px";
+
+    touchMove.x = dx / maxDist;
+    touchMove.y = dy / maxDist;
+
+  }, { passive:false });
+
+  joystickBase.addEventListener("touchend", ()=>{
+    resetJoystick();
+  });
+
+}
+
+/* ===== SPRINT MOBILE ===== */
+
+if(sprintBtn){
+
+  sprintBtn.addEventListener("touchstart", e=>{
+    e.preventDefault();
+    keys["shift"] = true;
+  });
+
+  sprintBtn.addEventListener("touchend", ()=>{
+    keys["shift"] = false;
+  });
+
+}
+
+/* ===== APPLICATION DES INPUTS ===== */
+
+function applyMobileControls(){
+
+  // Horizontal
+  if(Math.abs(touchMove.x) > 0.08){
+
+    if(touchMove.x > 0){
+
+      keys["d"] = true;
+      keys["q"] = false;
+      keys["a"] = false;
+
+    }else{
+
+      keys["q"] = true;
+      keys["a"] = true;
+      keys["d"] = false;
+
+    }
+
+  }else{
+
+    keys["d"] = false;
+    keys["q"] = false;
+    keys["a"] = false;
+
+  }
+
+  // Vertical
+  if(Math.abs(touchMove.y) > 0.08){
+
+    if(touchMove.y > 0){
+
+      keys["s"] = true;
+      keys["z"] = false;
+      keys["w"] = false;
+
+    }else{
+
+      keys["z"] = true;
+      keys["w"] = true;
+      keys["s"] = false;
+
+    }
+
+  }else{
+
+    keys["s"] = false;
+    keys["z"] = false;
+    keys["w"] = false;
+
+  }
+
+}
+
+/* ===== BOUCLE MOBILE ===== */
+
+setInterval(()=>{
+  applyMobileControls();
+}, 16);
+
+</script>
 </body>
 </html>
