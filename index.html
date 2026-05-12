@@ -19,7 +19,7 @@ body{
     background:#87ceeb;
 }
 
-/* MENU */
+/* ================= MENU ================= */
 
 #menu{
     position:fixed;
@@ -37,7 +37,7 @@ body{
 }
 
 #menu h1{
-    font-size:70px;
+    font-size:72px;
     margin-bottom:20px;
     text-shadow:3px 3px 10px black;
 }
@@ -63,7 +63,7 @@ body{
     transform:scale(1.08);
 }
 
-/* MONDE */
+/* ================= MONDE ================= */
 
 #viewport{
     width:100vw;
@@ -80,7 +80,28 @@ body{
     linear-gradient(#87CEEB 0%, #bdefff 35%, #63bf65 35%, #4b944c 100%);
 }
 
-/* JOUEUR */
+#world::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at 20% 20%,
+    rgba(255,255,255,0.06),
+    transparent 30%),
+
+    radial-gradient(circle at 80% 50%,
+    rgba(255,255,255,0.05),
+    transparent 30%);
+    pointer-events:none;
+}
+
+/* ================= JOUEUR ================= */
+
+@keyframes otterBounce{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-6px);}
+    100%{transform:translateY(0px);}
+}
 
 #player{
     position:absolute;
@@ -88,10 +109,11 @@ body{
     height:64px;
     font-size:52px;
     z-index:50;
-    transition:transform 0.08s;
+    animation:otterBounce 0.45s infinite;
+    filter:drop-shadow(0 0 8px rgba(255,255,255,0.7));
 }
 
-/* UI */
+/* ================= UI ================= */
 
 #ui{
     position:fixed;
@@ -100,10 +122,6 @@ body{
     color:white;
     z-index:999;
     text-shadow:2px 2px 5px black;
-}
-
-#ui h1{
-    margin-bottom:5px;
 }
 
 .questBox{
@@ -123,15 +141,34 @@ body{
     color:green;
 }
 
-/* ANIMAUX */
+/* ================= ANIMAUX ================= */
+
+@keyframes sparkle{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.15);}
+    100%{transform:scale(1);}
+}
 
 .animal{
     position:absolute;
     font-size:50px;
     z-index:40;
+    animation:sparkle 2s infinite;
 }
 
-/* MESSAGE */
+/* ================= MESSAGE ================= */
+
+@keyframes popup{
+    from{
+        transform:translate(-50%, -50%) scale(0.6);
+        opacity:0;
+    }
+
+    to{
+        transform:translate(-50%, -50%) scale(1);
+        opacity:1;
+    }
+}
 
 #messageBox{
     position:fixed;
@@ -146,6 +183,7 @@ body{
     display:none;
     z-index:4000;
     box-shadow:0 0 30px rgba(0,0,0,0.35);
+    animation:popup 0.3s ease;
 }
 
 #messageBox h2{
@@ -169,7 +207,7 @@ body{
     font-size:16px;
 }
 
-/* FIN */
+/* ================= FIN ================= */
 
 #winScreen{
     position:fixed;
@@ -189,7 +227,7 @@ body{
     margin-bottom:20px;
 }
 
-/* DÉCOR */
+/* ================= DÉCOR ================= */
 
 .tree{
     position:absolute;
@@ -200,8 +238,11 @@ body{
 .treeTop{
     width:90px;
     height:90px;
-    background:#228b22;
     border-radius:50%;
+    background:
+    radial-gradient(circle at 30% 30%,
+    #44d844,
+    #228b22);
 }
 
 .treeTrunk{
@@ -214,6 +255,7 @@ body{
 .flower{
     position:absolute;
     font-size:28px;
+    animation:sparkle 3s infinite;
 }
 
 .path{
@@ -224,8 +266,31 @@ body{
 
 .lake{
     position:absolute;
-    background:#42a5ff;
     border-radius:50%;
+    background:
+    radial-gradient(circle at top,
+    #71c0ff,
+    #3090ff);
+}
+
+@keyframes waterMove{
+    0%{background-position:0 0;}
+    100%{background-position:200px 0;}
+}
+
+.river{
+    position:absolute;
+
+    background:
+    repeating-linear-gradient(
+        90deg,
+        #2f8fff,
+        #2f8fff 20px,
+        #57a8ff 20px,
+        #57a8ff 40px
+    );
+
+    animation:waterMove 4s linear infinite;
 }
 
 .bush{
@@ -256,6 +321,7 @@ body{
     background:#f2d6a2;
     border:4px solid #8b5a2b;
     position:relative;
+    box-shadow:0 0 20px rgba(0,0,0,0.2);
 }
 
 .door{
@@ -295,11 +361,6 @@ body{
     border-radius:10px;
 }
 
-.river{
-    position:absolute;
-    background:#3390ff;
-}
-
 .obstacle{
     position:absolute;
 }
@@ -309,7 +370,7 @@ body{
 
 <body>
 
-<!-- MENU -->
+<!-- ================= MENU ================= -->
 
 <div id="menu">
 
@@ -317,7 +378,7 @@ body{
 
     <p>
         Retrouve Minette, Tchoupi et Tiplouf
-        dans le grand monde magique.
+        dans le grand monde magique ✨
     </p>
 
     <button id="startBtn">
@@ -326,127 +387,173 @@ body{
 
 </div>
 
-<!-- JEU -->
+<!-- ================= JEU ================= -->
 
 <div id="viewport">
 
-    <div id="world">
+<div id="world">
 
-        <!-- Julia -->
-        <div id="player">🦦</div>
+    <!-- JOUEUR -->
+    <div id="player">🦦</div>
 
-        <!-- Animaux -->
-        <div class="animal" id="minette"
-        style="left:2150px;top:350px;">🐱</div>
+    <!-- ANIMAUX -->
+    <div class="animal" id="minette"
+    style="left:2150px;top:350px;">🐱</div>
 
-        <div class="animal" id="tchoupi"
-        style="left:420px;top:1450px;">🐰</div>
+    <div class="animal" id="tchoupi"
+    style="left:420px;top:1450px;">🐰</div>
 
-        <div class="animal" id="tiplouf"
-        style="left:2300px;top:1450px;">🐇</div>
+    <div class="animal" id="tiplouf"
+    style="left:2300px;top:1450px;">🐇</div>
 
-        <!-- Chemins -->
-        <div class="path"
-        style="left:100px;top:500px;width:1600px;height:90px;"></div>
+    <!-- CHEMINS -->
+    <div class="path"
+    style="left:100px;top:500px;width:1600px;height:90px;"></div>
 
-        <div class="path"
-        style="left:1500px;top:500px;width:90px;height:900px;"></div>
+    <div class="path"
+    style="left:1500px;top:500px;width:90px;height:900px;"></div>
 
-        <!-- Lac -->
-        <div class="lake obstacle"
-        style="left:1650px;top:150px;width:350px;height:250px;"></div>
+    <!-- LAC -->
+    <div class="lake obstacle"
+    style="left:1650px;top:150px;width:350px;height:250px;"></div>
 
-        <!-- Rivière -->
-        <div class="river obstacle"
-        style="left:950px;top:0;width:180px;height:900px;"></div>
+    <!-- RIVIÈRE -->
+    <div class="river obstacle"
+    style="left:950px;top:0;width:180px;height:900px;"></div>
 
-        <!-- Rochers -->
-        <div class="rock obstacle"
-        style="left:550px;top:350px;width:180px;height:130px;"></div>
+    <!-- ROCHERS -->
+    <div class="rock obstacle"
+    style="left:550px;top:350px;width:180px;height:130px;"></div>
 
-        <div class="rock obstacle"
-        style="left:1800px;top:1050px;width:220px;height:150px;"></div>
+    <div class="rock obstacle"
+    style="left:1800px;top:1050px;width:220px;height:150px;"></div>
 
-        <!-- Troncs -->
-        <div class="log obstacle"
-        style="left:1300px;top:300px;width:300px;height:60px;"></div>
+    <!-- TRONCS -->
+    <div class="log obstacle"
+    style="left:1300px;top:300px;width:300px;height:60px;"></div>
 
-        <div class="log obstacle"
-        style="left:900px;top:1200px;width:400px;height:50px;"></div>
+    <div class="log obstacle"
+    style="left:900px;top:1200px;width:400px;height:50px;"></div>
 
-        <!-- Maisons -->
-        <div class="house obstacle"
-        style="left:320px;top:820px;">
+    <!-- MAISONS -->
+    <div class="house obstacle"
+    style="left:320px;top:820px;">
 
-            <div class="houseRoof"></div>
+        <div class="houseRoof"></div>
 
-            <div class="houseBody">
-                <div class="door"></div>
-                <div class="window left"></div>
-                <div class="window right"></div>
-            </div>
-
+        <div class="houseBody">
+            <div class="door"></div>
+            <div class="window left"></div>
+            <div class="window right"></div>
         </div>
-
-        <div class="house obstacle"
-        style="left:1900px;top:900px;">
-
-            <div class="houseRoof"></div>
-
-            <div class="houseBody">
-                <div class="door"></div>
-                <div class="window left"></div>
-                <div class="window right"></div>
-            </div>
-
-        </div>
-
-        <!-- Arbres -->
-        <div class="tree" style="left:250px;top:250px;">
-            <div class="treeTop"></div>
-            <div class="treeTrunk"></div>
-        </div>
-
-        <div class="tree" style="left:700px;top:900px;">
-            <div class="treeTop"></div>
-            <div class="treeTrunk"></div>
-        </div>
-
-        <div class="tree" style="left:2100px;top:700px;">
-            <div class="treeTop"></div>
-            <div class="treeTrunk"></div>
-        </div>
-
-        <!-- Buissons -->
-        <div class="bush obstacle"
-        style="left:850px;top:980px;"></div>
-
-        <div class="bush obstacle"
-        style="left:930px;top:1060px;"></div>
-
-        <div class="bush obstacle"
-        style="left:2000px;top:620px;"></div>
-
-        <!-- Fleurs -->
-        <div class="flower"
-        style="left:530px;top:700px;">🌸</div>
-
-        <div class="flower"
-        style="left:580px;top:730px;">🌼</div>
-
-        <div class="flower"
-        style="left:630px;top:710px;">🌺</div>
-
-        <div class="flower"
-        style="left:1450px;top:820px;">🌷</div>
-
-        <div class="flower"
-        style="left:1520px;top:860px;">🌻</div>
 
     </div>
+
+    <div class="house obstacle"
+    style="left:1900px;top:900px;">
+
+        <div class="houseRoof"></div>
+
+        <div class="houseBody">
+            <div class="door"></div>
+            <div class="window left"></div>
+            <div class="window right"></div>
+        </div>
+
+    </div>
+
+    <!-- ARBRES -->
+    <div class="tree" style="left:250px;top:250px;">
+        <div class="treeTop"></div>
+        <div class="treeTrunk"></div>
+    </div>
+
+    <div class="tree" style="left:700px;top:900px;">
+        <div class="treeTop"></div>
+        <div class="treeTrunk"></div>
+    </div>
+
+    <div class="tree" style="left:2100px;top:700px;">
+        <div class="treeTop"></div>
+        <div class="treeTrunk"></div>
+    </div>
+
+    <!-- BUISSONS -->
+    <div class="bush obstacle"
+    style="left:850px;top:980px;"></div>
+
+    <div class="bush obstacle"
+    style="left:930px;top:1060px;"></div>
+
+    <div class="bush obstacle"
+    style="left:2000px;top:620px;"></div>
+
+    <!-- FLEURS -->
+    <div class="flower"
+    style="left:530px;top:700px;">🌸</div>
+
+    <div class="flower"
+    style="left:580px;top:730px;">🌼</div>
+
+    <div class="flower"
+    style="left:630px;top:710px;">🌺</div>
+
+    <div class="flower"
+    style="left:1450px;top:820px;">🌷</div>
+
+    <div class="flower"
+    style="left:1520px;top:860px;">🌻</div>
+
+    <!-- OBJETS -->
+    <div style="
+    position:absolute;
+    left:1200px;
+    top:820px;
+    font-size:60px;
+    ">
+    🪑
+    </div>
+
+    <div style="
+    position:absolute;
+    left:600px;
+    top:1250px;
+    font-size:90px;
+    ">
+    ⛲
+    </div>
+
+    <div style="
+    position:absolute;
+    left:950px;
+    top:1450px;
+    font-size:40px;
+    ">
+    🍄
+    </div>
+
+    <div style="
+    position:absolute;
+    left:1020px;
+    top:1490px;
+    font-size:35px;
+    ">
+    🍄
+    </div>
+
+    <div style="
+    position:absolute;
+    left:1500px;
+    top:650px;
+    font-size:55px;
+    ">
+    🪧
+    </div>
+
+</div>
 </div>
 
-<!-- UI -->
+<!-- ================= UI ================= -->
 
 <div id="ui">
 
@@ -457,11 +564,11 @@ body{
         <span id="score">0</span>/3
     </p>
 
-    <p>Déplacements : ZQSD / WASD / Flèches</p>
+    <p>ZQSD / WASD / Flèches</p>
 
 </div>
 
-<!-- QUÊTES -->
+<!-- ================= QUÊTES ================= -->
 
 <div class="questBox">
 
@@ -473,7 +580,7 @@ body{
 
 </div>
 
-<!-- LETTRE -->
+<!-- ================= LETTRE ================= -->
 
 <div id="messageBox">
 
@@ -487,7 +594,7 @@ body{
 
 </div>
 
-<!-- FIN -->
+<!-- ================= FIN ================= -->
 
 <div id="winScreen">
 
@@ -502,13 +609,16 @@ body{
 
 <script>
 
+/* ================= VARIABLES ================= */
+
 const player = document.getElementById("player");
 const world = document.getElementById("world");
 
 const startBtn = document.getElementById("startBtn");
 const menu = document.getElementById("menu");
 
-const continueBtn = document.getElementById("continueBtn");
+const continueBtn =
+document.getElementById("continueBtn");
 
 let x = 120;
 let y = 120;
@@ -522,30 +632,76 @@ let gamePaused = false;
 
 const keys = {};
 
-const foundSound =
-new Audio("https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3");
+const animalDirections = {
+    minette:1,
+    tchoupi:-1,
+    tiplouf:1
+};
 
-const winSound =
-new Audio("https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3");
+/* ================= SONS ================= */
+
+const foundSound = new Audio(
+"https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=collectcoin-6075.mp3"
+);
+
+const winSound = new Audio(
+"https://cdn.pixabay.com/download/audio/2022/10/25/audio_9468d1d1d7.mp3?filename=success-fanfare-trumpets-6185.mp3"
+);
+
+const walkSound = new Audio(
+"https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3?filename=footsteps-grass-6823.mp3"
+);
+
+walkSound.volume = 0.1;
+walkSound.loop = true;
+
+/* ================= TEXTES ================= */
 
 const messages = {
 
     minette: {
-        title: "🐱 Minette retrouvée !",
+
+        title:"🐱 Minette retrouvée !",
+
         text:
-        "Minette était cachée près du lac.\n\nMême quand tu traverses des moments compliqués, tu avances toujours."
+`Minette se promenait près du lac magique.
+
+✨ Lettre de motivation :
+
+Même quand tu avances lentement,
+tu progresses toujours.
+Les efforts invisibles comptent aussi.`
+
     },
 
     tchoupi: {
-        title: "🐰 Tchoupi retrouvé !",
+
+        title:"🐰 Tchoupi retrouvé !",
+
         text:
-        "Tchoupi sort du jardin fleuri.\n\nLes petites victoires sont importantes. Continue d’avancer."
+`Tchoupi se cachait près des fleurs.
+
+✨ Lettre de motivation :
+
+Chaque petite victoire mérite
+d’être célébrée.
+Continue ton chemin à ton rythme.`
+
     },
 
     tiplouf: {
-        title: "🐇 Tiplouf retrouvé !",
+
+        title:"🐇 Tiplouf retrouvé !",
+
         text:
-        "Tiplouf était caché près de la maison.\n\nTu peux être fier de ton chemin et de tous tes efforts."
+`Tiplouf était derrière la maison.
+
+✨ Lettre de motivation :
+
+Tu peux être fier du chemin parcouru.
+Les personnes déterminées finissent
+toujours par avancer.`
+
     }
 
 };
@@ -553,7 +709,7 @@ const messages = {
 const obstacles =
 [...document.querySelectorAll(".obstacle")];
 
-/* MENU */
+/* ================= MENU ================= */
 
 startBtn.addEventListener("click", () => {
 
@@ -563,7 +719,7 @@ startBtn.addEventListener("click", () => {
 
 });
 
-/* COLLISIONS */
+/* ================= COLLISION ================= */
 
 function rectsCollide(r1, r2){
 
@@ -578,7 +734,35 @@ function rectsCollide(r1, r2){
 
 }
 
-/* MOUVEMENT */
+/* ================= ANIMAUX MOBILES ================= */
+
+function moveAnimals(){
+
+    document.querySelectorAll(".animal")
+    .forEach(animal => {
+
+        if(animal.dataset.done) return;
+
+        let left = animal.offsetLeft;
+
+        left += 0.35 *
+        animalDirections[animal.id];
+
+        if(left > 2350){
+            animalDirections[animal.id] = -1;
+        }
+
+        if(left < 250){
+            animalDirections[animal.id] = 1;
+        }
+
+        animal.style.left = left + "px";
+
+    });
+
+}
+
+/* ================= JOUEUR ================= */
 
 function movePlayer(){
 
@@ -598,6 +782,33 @@ function movePlayer(){
 
         if(keys["d"] || keys["arrowright"])
             nextX += speed;
+
+        const moving =
+        keys["z"] ||
+        keys["q"] ||
+        keys["s"] ||
+        keys["d"] ||
+        keys["w"] ||
+        keys["a"] ||
+        keys["arrowup"] ||
+        keys["arrowdown"] ||
+        keys["arrowleft"] ||
+        keys["arrowright"];
+
+        if(moving){
+
+            if(walkSound.paused){
+
+                walkSound.play().catch(()=>{});
+
+            }
+
+        }else{
+
+            walkSound.pause();
+            walkSound.currentTime = 0;
+
+        }
 
         const futureRect = {
 
@@ -644,14 +855,17 @@ function movePlayer(){
 
         cameraFollow();
 
+        moveAnimals();
+
         checkAnimals();
+
     }
 
     requestAnimationFrame(movePlayer);
 
 }
 
-/* CAMÉRA */
+/* ================= CAMERA ================= */
 
 function cameraFollow(){
 
@@ -666,7 +880,7 @@ function cameraFollow(){
 
 }
 
-/* ANIMAUX */
+/* ================= TROUVER ANIMAUX ================= */
 
 function checkAnimals(){
 
@@ -763,7 +977,7 @@ function checkAnimals(){
 
 }
 
-/* CONTINUER */
+/* ================= CONTINUER ================= */
 
 continueBtn.addEventListener("click", () => {
 
@@ -774,7 +988,7 @@ continueBtn.addEventListener("click", () => {
 
 });
 
-/* CLAVIER */
+/* ================= CLAVIER ================= */
 
 window.addEventListener("keydown", e => {
 
@@ -788,7 +1002,7 @@ window.addEventListener("keyup", e => {
 
 });
 
-/* START */
+/* ================= START ================= */
 
 movePlayer();
 
