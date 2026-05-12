@@ -1055,16 +1055,32 @@ const animalInitPos = {
 };
 
 /* ===== SONS ===== */
+let audioCtx = null;
+
+function initAudio(){
+  if(!audioCtx){
+    try{
+      audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+      if(audioCtx.state === 'suspended'){
+        document.addEventListener('click', ()=>{
+          if(audioCtx.state === 'suspended') audioCtx.resume();
+        }, {once:true});
+      }
+    }catch(e){}
+  }
+}
+
 function makeBeep(freq, dur, type='sine', vol=0.3){
+  if(!audioCtx) initAudio();
   try{
-    const ctx = new (window.AudioContext||window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
+    if(!audioCtx || audioCtx.state !== 'running') return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
     o.type = type; o.frequency.value = freq;
-    g.gain.setValueAtTime(vol, ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime+dur);
-    o.start(); o.stop(ctx.currentTime+dur);
+    g.gain.setValueAtTime(vol, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime+dur);
+    o.start(); o.stop(audioCtx.currentTime+dur);
   }catch(e){}
 }
 
@@ -1130,6 +1146,7 @@ createMenuClouds();
 
 /* ===== DÉMARRAGE ===== */
 startBtn.addEventListener("click",()=>{
+  initAudio();
   menu.style.opacity="1";
   menu.style.transition="opacity 0.6s";
   menu.style.opacity="0";
@@ -1440,7 +1457,16 @@ movePlayer();
 <style>
 /* ===== MOBILE ===== */
 #mobileControls{
-  display:none;
+  display:block;
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:9999;
+}
+
+body{
+  touch-action:none;
+  overscroll-behavior:none;
 }
 
 @media (max-width: 900px){
@@ -1501,17 +1527,63 @@ movePlayer();
   }
 
   .questBox{
-    width:180px;
-    font-size:12px;
+    width:140px;
+    font-size:10px;
+    right:8px;
+    bottom:auto;
+    top:50px;
+    padding:10px 12px;
+    max-height:200px;
+    overflow-y:auto;
+  }
+
+  .questBox h3{
+    font-size:13px;
+    margin-bottom:6px;
+  }
+
+  .quest-item{
+    font-size:11px;
+    margin:3px 0;
+    padding:3px 6px;
   }
 
   #minimap{
-    width:120px;
-    height:85px;
+    width:110px;
+    height:80px;
+    bottom:120px;
+    right:8px;
+  }
+
+  .minimap-label{
+    font-size:8px;
+  }
+
+  #staminaBar{
+    bottom:10px;
+    left:10px;
+    padding:8px 12px;
+  }
+
+  .stamina-label{
+    font-size:11px;
+  }
+
+  .stamina-track{
+    width:100px;
   }
 
   .ui-card{
-    padding:10px 14px;
+    padding:8px 12px;
+    font-size:12px;
+  }
+
+  .ui-title{
+    font-size:18px;
+  }
+
+  .ui-score, .star-count, .ui-controls{
+    font-size:11px;
   }
 
   .menu-title{
