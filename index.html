@@ -1488,8 +1488,8 @@ body{
     position:absolute;
     left:15px;
     bottom:15px;
-    width:100px;
-    height:100px;
+    width:120px;
+    height:120px;
     border-radius:50%;
     background:rgba(255,255,255,0.18);
     backdrop-filter:blur(10px);
@@ -1500,10 +1500,10 @@ body{
 
   #joystickStick{
     position:absolute;
-    left:25px;
-    top:25px;
-    width:50px;
-    height:50px;
+    left:30px;
+    top:30px;
+    width:60px;
+    height:60px;
     border-radius:50%;
     background:rgba(255,255,255,0.55);
     border:2px solid rgba(255,255,255,0.6);
@@ -1602,27 +1602,32 @@ body{
   }
 
   #messageBox{
-    width:90%;
-    max-width:340px;
-    padding:18px 16px;
-    max-height:75vh;
+    width:88%;
+    max-width:320px;
+    padding:16px 14px;
+    max-height:70vh;
     overflow-y:auto;
+    text-align:center;
   }
 
   #messageBox h2{
-    font-size:20px;
-    margin-bottom:10px;
+    font-size:18px;
+    margin-bottom:12px;
+    word-wrap:break-word;
   }
 
   #messageBox p{
-    font-size:14px;
-    line-height:1.5;
+    font-size:13px;
+    line-height:1.6;
+    word-wrap:break-word;
+    margin:0;
+    padding:0 4px;
   }
 
   #continueBtn{
-    margin-top:14px;
-    padding:10px 24px;
-    font-size:14px;
+    margin-top:12px;
+    padding:9px 20px;
+    font-size:13px;
   }
 
 }
@@ -1642,8 +1647,8 @@ let touchMove = {
 
 function resetJoystick(){
 
-  joystickStick.style.left = "25px";
-  joystickStick.style.top = "25px";
+  joystickStick.style.left = "30px";
+  joystickStick.style.top = "30px";
 
   touchMove.x = 0;
   touchMove.y = 0;
@@ -1669,15 +1674,15 @@ if(joystickBase){
     let dy = touch.clientY - centerY;
 
     const dist = Math.hypot(dx, dy);
-    const maxDist = 32;
+    const maxDist = 40;
 
     if(dist > maxDist){
       dx = (dx / dist) * maxDist;
       dy = (dy / dist) * maxDist;
     }
 
-    joystickStick.style.left = (25 + dx) + "px";
-    joystickStick.style.top = (25 + dy) + "px";
+    joystickStick.style.left = (30 + dx) + "px";
+    joystickStick.style.top = (30 + dy) + "px";
 
     touchMove.x = dx / maxDist;
     touchMove.y = dy / maxDist;
