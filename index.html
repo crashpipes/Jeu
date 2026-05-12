@@ -390,31 +390,7 @@ body{
   background:rgba(76,175,80,0.08);
 }
 
-/* ===== MINI-MAP ===== */
-#minimap{
-  position:fixed;
-  bottom:15px; right:15px;
-  width:160px; height:110px;
-  background:rgba(255,255,255,0.82);
-  backdrop-filter:blur(10px);
-  border-radius:16px;
-  box-shadow:0 4px 20px rgba(0,0,0,0.15);
-  border:1.5px solid rgba(255,255,255,0.9);
-  overflow:hidden;
-  z-index:999;
-}
 
-#minimap-canvas{
-  width:100%; height:100%;
-}
-
-.minimap-label{
-  position:absolute;
-  bottom:4px; left:8px;
-  font-size:10px;
-  color:#888;
-  font-weight:700;
-}
 
 /* ===== MESSAGE BOX ===== */
 @keyframes popIn{
@@ -996,11 +972,7 @@ body{
   </div>
 </div>
 
-<!-- ===== MINI-MAP ===== -->
-<div id="minimap">
-  <canvas id="minimap-canvas" width="160" height="110"></canvas>
-  <div class="minimap-label">Carte</div>
-</div>
+
 
 <!-- ===== STAMINA ===== -->
 <div id="staminaBar">
@@ -1043,8 +1015,7 @@ const continueBtn = document.getElementById("continueBtn");
 const notification = document.getElementById("notification");
 const staminaFill = document.getElementById("staminaFill");
 const sprintBadge = document.getElementById("sprintBadge");
-const mmCanvas = document.getElementById("minimap-canvas");
-const mmCtx = mmCanvas.getContext("2d");
+
 
 let x = 130, y = 130;
 const BASE_SPEED = 4;
@@ -1385,7 +1356,6 @@ function movePlayer(){
     checkCollectibles();
     checkAnimals();
     checkNpcs();
-    drawMinimap();
   }
   requestAnimationFrame(movePlayer);
 }
@@ -1397,55 +1367,7 @@ function cameraFollow(){
   world.style.transform=`translate(${-camX}px,${-camY}px)`;
 }
 
-/* ===== MINI-MAP ===== */
-const MM_W=160, MM_H=110;
-const WORLD_W=3200, WORLD_H=2200;
 
-function drawMinimap(){
-  mmCtx.clearRect(0,0,MM_W,MM_H);
-
-  // Fond
-  mmCtx.fillStyle="#c9f3ff";
-  mmCtx.fillRect(0,0,MM_W,MM_H/2);
-  mmCtx.fillStyle="#5ecb5e";
-  mmCtx.fillRect(0,MM_H/2,MM_W,MM_H/2);
-
-  // Rivière
-  mmCtx.fillStyle="#3fa7ff";
-  mmCtx.fillRect((1100/WORLD_W)*MM_W,0,(200/WORLD_W)*MM_W,(1100/WORLD_H)*MM_H);
-
-  // Animaux
-  const animalEmoji={"minette":"🐱","tchoupi":"🐰","tiplouf":"🐇"};
-  document.querySelectorAll(".animal").forEach(a=>{
-    if(a.dataset.done) return;
-    const ax=(a.offsetLeft/WORLD_W)*MM_W;
-    const ay=(a.offsetTop/WORLD_H)*MM_H;
-    mmCtx.font="10px serif";
-    mmCtx.fillText(animalEmoji[a.id]||"●",ax-5,ay+5);
-  });
-
-  // Étoiles
-  document.querySelectorAll(".collectible").forEach(c=>{
-    if(c.dataset.done) return;
-    const cx=(c.offsetLeft/WORLD_W)*MM_W;
-    const cy=(c.offsetTop/WORLD_H)*MM_H;
-    mmCtx.fillStyle="#ffe066";
-    mmCtx.beginPath();
-    mmCtx.arc(cx,cy,2.5,0,Math.PI*2);
-    mmCtx.fill();
-  });
-
-  // Joueur
-  const px=(x/WORLD_W)*MM_W;
-  const py=(y/WORLD_H)*MM_H;
-  mmCtx.fillStyle="#ff6eb5";
-  mmCtx.beginPath();
-  mmCtx.arc(px,py,4,0,Math.PI*2);
-  mmCtx.fill();
-  mmCtx.strokeStyle="white";
-  mmCtx.lineWidth=1.5;
-  mmCtx.stroke();
-}
 
 /* ===== CONTINUER ===== */
 continueBtn.addEventListener("click",()=>{
@@ -1574,16 +1496,7 @@ body{
     padding:3px 6px;
   }
 
-  #minimap{
-    width:110px;
-    height:80px;
-    bottom:120px;
-    right:8px;
-  }
 
-  .minimap-label{
-    font-size:8px;
-  }
 
   #staminaBar{
     bottom:125px;
